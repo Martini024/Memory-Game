@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Memory game</string>
+    <string name="app_name">Memory Game</string>
+    <string name="img_alt">Image Card</string>
 </resources>

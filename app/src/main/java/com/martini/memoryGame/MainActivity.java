@@ -1,7 +1,6 @@
-package com.martini.memorygame;
+package com.martini.memoryGame;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 
