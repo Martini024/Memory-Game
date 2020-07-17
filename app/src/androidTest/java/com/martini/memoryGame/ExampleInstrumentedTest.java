@@ -1,4 +1,4 @@
-package com.martini.memorygame;
+package com.martini.memoryGame;
 
 import android.content.Context;
 

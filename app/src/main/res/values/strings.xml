@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Memory Game</string>
     <string name="img_alt">Image Card</string>
+    <string name="btn_fetch">Fetch</string>
+    <string name="btn_confirm">Confirm</string>
+    <string name="url_input">https://stocksnap.io/search/food</string>
 </resources>
