@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,8 +35,6 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
 
     @Override
     protected void onPreExecute() {
-        progressBar.setVisibility(View.VISIBLE);
-        loadingText.setVisibility(View.VISIBLE);
         imageButtons.forEach(el -> {
             ImageButton imageButton = (ImageButton) el;
             imageButton.setImageResource(android.R.color.transparent);
@@ -76,15 +73,5 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
             System.out.println(e.getMessage());
         }
         return null;
-    }
-
-    protected void onPostExecute(Void result) {
-        AlphaAnimation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
-        fadeOutAnimation.setDuration(2000);
-        fadeOutAnimation.setFillEnabled(false);
-        progressBar.startAnimation(fadeOutAnimation);
-        progressBar.setVisibility(View.INVISIBLE);
-        loadingText.startAnimation(fadeOutAnimation);
-        loadingText.setVisibility(View.INVISIBLE);
     }
 }

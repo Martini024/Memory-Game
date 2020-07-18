@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
@@ -19,7 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.martini.memoryGame.adapter.LoadAdapter;
 import com.martini.memoryGame.asyncTask.DownloadImageTask;
 import com.martini.memoryGame.util.ViewGroupUtils;
 
@@ -36,46 +41,61 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getBaseContext(), 4, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new LoadAdapter(20));
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(final RecyclerView rv, MotionEvent e) {
+                final View child = rv.findChildViewUnder(e.getX(), e.getY());
+                if (child != null && child.findViewById(R.id.imageButton) != null && child.findViewById(R.id.imageButton).isEnabled()) {
+                    final int position = rv.getChildAdapterPosition(child);
+                    ImageButton imageButton = (ImageButton) child.findViewById(R.id.imageButton);
+                    if (selectedImage.contains(imageButton)) {
+                        selectedImage.remove(imageButton);
+                        imageButton.setForeground(null);
+                        imageButton.setImageAlpha(255);
+                        findViewById(R.id.confirm).setEnabled(false);
+                    } else if (selectedImage.size() == 6) {
+                        Toast toast = Toast.makeText(getBaseContext(), "Cannot select image more than 6",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    } else {
+                        selectedImage.add(imageButton);
+                        Drawable drawable = (VectorDrawable) getDrawable(R.drawable.ic_check_circle_outline_black);
+                        imageButton.setForeground(drawable);
+                        imageButton.setImageAlpha(128);
+                    }
+                    if (selectedImage.size() == 6) {
+                        findViewById(R.id.confirm).setEnabled(true);
+                    }
+                }
+                return true;
+            }
 
-        List<View> imageButtonList = ViewGroupUtils.getViewsByTag(findViewById(R.id.imageButton).getRootView(), "imageButton");
-        imageButtonList.forEach(el -> {
-            el.setOnClickListener(this);
-            el.setEnabled(false);
-            el.setAlpha(0.75f);
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            }
         });
         findViewById(R.id.fetch).setOnClickListener(this);
         findViewById(R.id.confirm).setOnClickListener(this);
         findViewById(R.id.confirm).setEnabled(false);
+        ((ProgressBar) findViewById(R.id.progressBarHorizontal)).setProgress(0);
+        ((TextView) findViewById(R.id.loadingText)).setText(R.string.loading_text);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getTag() != null && v.getTag().toString().equals("imageButton")) {
-            ImageButton imageButton = (ImageButton) findViewById(v.getId());
-            if (selectedImage.contains(imageButton)) {
-                selectedImage.remove(imageButton);
-                imageButton.setForeground(null);
-                imageButton.setImageAlpha(255);
-                findViewById(R.id.confirm).setEnabled(false);
-            } else if (selectedImage.size() == 6) {
-                Toast toast = Toast.makeText(this, "Cannot select image more than 6",
-                        Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-            } else {
-                selectedImage.add(imageButton);
-                Drawable drawable = (VectorDrawable) getDrawable(R.drawable.ic_check_circle_outline_black);
-                imageButton.setForeground(drawable);
-                imageButton.setImageAlpha(128);
-            }
-            if (selectedImage.size() == 6) {
-                findViewById(R.id.confirm).setEnabled(true);
-            }
-        } else if (v.getId() == R.id.fetch) {
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        if (v.getId() == R.id.fetch) {
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarHorizontal);
             progressBar.setProgress(0);
             TextView loadingText = (TextView) findViewById(R.id.loadingText);
             loadingText.setText(R.string.loading_text);
@@ -91,7 +111,7 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
             inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
 
             List<View> imageButtonList = ViewGroupUtils.getViewsByTag(findViewById(R.id.imageButton).getRootView(), "imageButton");
-            List<View> progressBarList = ViewGroupUtils.getViewsByTag(findViewById(R.id.progressBar1).getRootView(), "progressBar");
+            List<View> progressBarList = ViewGroupUtils.getViewsByTag(findViewById(R.id.progressBar).getRootView(), "progressBar");
             if (URLUtil.isValidUrl(editText.getText().toString())) {
                 if (downloadImageTask != null) {
                     downloadImageTask.cancel(true);
@@ -102,7 +122,6 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v.getId() == R.id.confirm) {
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
             File directory = contextWrapper.getDir("imageDir", Context.MODE_PRIVATE);
-            System.out.println(getFilesDir());
             FileOutputStream fileOutputStream = null;
             try {
                 for (int i = 0; i < selectedImage.size(); i++) {

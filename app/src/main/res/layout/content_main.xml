@@ -8,20 +8,23 @@
         android:id="@+id/inputBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginEnd="26dp"
+        android:contextClickable="false"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!--        Two components, score board and timer-->
-
-        <EditText
-            android:id="@+id/timer"
-            android:layout_width="wrap_content"
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:autofillHints="00:00"
-            android:ems="10"
-            android:inputType="time"
+            android:textAlignment="textEnd"
+            android:textColor="@android:color/tertiary_text_dark"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,8 +33,9 @@
             android:id="@+id/score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/timer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -40,188 +44,21 @@
         android:id="@+id/imageButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputBar">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/imageButton1"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="14dp"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageButton"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="14dp"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton3"
-            app:layout_constraintStart_toEndOf="@+id/imageButton1"
-            app:layout_constraintTop_toTopOf="@+id/imageButton"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton3"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="16dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageButton"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="14dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton1"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton5"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="14dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton6"
-            app:layout_constraintStart_toEndOf="@+id/imageButton4"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton2"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton6"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="16dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton3"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton7"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="14dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton4"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton8"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="14dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton9"
-            app:layout_constraintStart_toEndOf="@+id/imageButton7"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton5"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton9"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="16dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton6"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton10"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="14dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton7"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton11"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="14dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton12"
-            app:layout_constraintStart_toEndOf="@+id/imageButton10"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton8"
-            app:srcCompat="@drawable/code" />
-
-        <ImageButton
-            android:id="@+id/imageButton12"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="16dp"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:contentDescription="@string/img_alt"
-            android:scaleType="centerCrop"
-            android:tag="imageButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton9"
-            app:srcCompat="@drawable/code" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
