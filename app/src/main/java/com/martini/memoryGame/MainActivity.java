@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
@@ -28,20 +29,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private List<Bitmap> bitmaps = new ArrayList<>();
     private int lastClicked = -1;
     private int progress = -1;
-    private int time = 0;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView textView = (TextView) findViewById(R.id.score);
-        textView.setText("0 / 12 matches");
+        ((TextView) findViewById(R.id.score)).setText("0 / 12 matches");
+        Button fetchImage = (Button) findViewById(R.id.fetchImage);
+        fetchImage.setVisibility(View.GONE);
+        fetchImage.setOnClickListener(this);
+        Button playAgain = (Button) findViewById(R.id.playAgain);
+        playAgain.setVisibility(View.GONE);
+        playAgain.setOnClickListener(this);
+
         Bundle extras = getIntent().getExtras();
         File path = null;
         if (extras != null) {
@@ -94,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
                                 textView.setText(MessageFormat.format("{0} / 12 matches", progress));
                                 if (progress == 12) {
                                     // TODO: congratulations effect
-                                    // TODO: display two button for playAgain or select image again
                                     chronometer.stop();
-                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                                    startActivity(intent);
+                                    rv.setVisibility(View.INVISIBLE);
+                                    ((Button) findViewById(R.id.fetchImage)).setVisibility(View.VISIBLE);
+                                    ((Button) findViewById(R.id.playAgain)).setVisibility(View.VISIBLE);
                                 }
                             } else {
                                 rv.setEnabled(false);
@@ -133,5 +139,29 @@ public class MainActivity extends AppCompatActivity {
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
             }
         });
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        switch (v.getId()) {
+            case R.id.fetchImage:
+                intent = new Intent(this, LoadActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.playAgain:
+                lastClicked = -1;
+                progress = -1;
+                Collections.shuffle(bitmaps);
+                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+                recyclerView.setAdapter(new MainAdapter(bitmaps));
+                recyclerView.setVisibility(View.VISIBLE);
+                ((TextView) findViewById(R.id.score)).setText("0 / 12 matches");
+                ((Chronometer) findViewById(R.id.chronometer)).setBase(SystemClock.elapsedRealtime());
+                ((Button) findViewById(R.id.fetchImage)).setVisibility(View.GONE);
+                ((Button) findViewById(R.id.playAgain)).setVisibility(View.GONE);
+                break;
+        }
     }
 }
