@@ -1,6 +1,8 @@
 package com.martini.memoryGame;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         TextView textView = (TextView) findViewById(R.id.score);
-        textView.setText("0 / 12");
+        textView.setText("0 / 12 matches");
     }
 
     @Override
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getTag() != null && v.getTag().toString().equals("imageButton")) {
             if (progress == -1) {
                 progress = 0;
+                // TODO: add timer
 //                Timer timer = new Timer("gameTimer");
 //                timer.scheduleAtFixedRate(new TimerTask() {
 //                    public void run() {
@@ -79,11 +82,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             ImageButton tmpImageButton = (ImageButton) v;
             if (lastClicked == -1) {
+                // TODO: flip effect
+                ObjectAnimator flip = ObjectAnimator.ofInt(tmpImageButton, "rotationY", 0, 360);
+                flip.setDuration(500);
                 tmpImageButton.setImageBitmap(bitmaps.get(v.getId()));
+                flip.start();
                 lastClicked = tmpImageButton.getId();
             } else {
                 tmpImageButton.setImageBitmap(bitmaps.get(v.getId()));
                 if (bitmaps.get(lastClicked).sameAs(bitmaps.get(tmpImageButton.getId()))) {
+                    // TODO: add score effect
                     tmpImageButton.setImageBitmap(bitmaps.get(v.getId()));
                     tmpImageButton.setClickable(false);
                     ImageButton lastClickedButton = (ImageButton) findViewById(lastClicked);
@@ -92,9 +100,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     lastClicked = -1;
                     progress += 2;
                     TextView textView = (TextView) findViewById(R.id.score);
-                    textView.setText(MessageFormat.format("{0} / 12", progress));
+                    textView.setText(MessageFormat.format("{0} / 12 matches", progress));
+                    if (progress == 12) {
+                        // TODO: congratulations effect
+                        // TODO: display two button for playAgain or select image again
+                        Intent intent = new Intent(this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 } else {
-                    // After a delay set image to code
+                    // TODO: After a delay set image to code with flip effect
                     tmpImageButton.setClickable(false);
                     ImageButton lastClickedButton = (ImageButton) findViewById(lastClicked);
                     lastClickedButton.setClickable(false);
@@ -113,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             });
                         }
                     }, 500);
-
                 }
             }
         }

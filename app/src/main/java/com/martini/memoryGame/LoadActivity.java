@@ -15,6 +15,7 @@ import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,7 @@ import java.util.List;
 public class LoadActivity extends AppCompatActivity implements View.OnClickListener {
 
     private List<ImageButton> selectedImage = new ArrayList<>();
+    private DownloadImageTask downloadImageTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +74,11 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
             if (selectedImage.size() == 6) {
                 findViewById(R.id.confirm).setEnabled(true);
             }
-        }
-        if (v.getId() == R.id.fetch) {
+        } else if (v.getId() == R.id.fetch) {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setProgress(0);
+            TextView loadingText = (TextView) findViewById(R.id.loadingText);
+            loadingText.setText(R.string.loading_text);
             findViewById(R.id.confirm).setEnabled(false);
             selectedImage.forEach(el -> {
                 el.setForeground(null);
@@ -90,10 +93,13 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
             List<View> imageButtonList = ViewGroupUtils.getViewsByTag(findViewById(R.id.imageButton).getRootView(), "imageButton");
             List<View> progressBarList = ViewGroupUtils.getViewsByTag(findViewById(R.id.progressBar1).getRootView(), "progressBar");
             if (URLUtil.isValidUrl(editText.getText().toString())) {
-                new DownloadImageTask(imageButtonList, progressBarList, progressBar).execute(editText.getText().toString());
+                if (downloadImageTask != null) {
+                    downloadImageTask.cancel(true);
+                }
+                downloadImageTask = new DownloadImageTask(imageButtonList, progressBarList, progressBar, loadingText);
+                downloadImageTask.execute(editText.getText().toString());
             }
-        }
-        if (v.getId() == R.id.confirm) {
+        } else if (v.getId() == R.id.confirm) {
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
             File directory = contextWrapper.getDir("imageDir", Context.MODE_PRIVATE);
             System.out.println(getFilesDir());

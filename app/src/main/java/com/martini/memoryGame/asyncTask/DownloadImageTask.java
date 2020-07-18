@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,6 +15,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,16 +25,19 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
     List<View> imageButtons = new LinkedList<>();
     List<View> progressBars = new LinkedList<>();
     ProgressBar progressBar;
+    TextView loadingText;
 
-    public DownloadImageTask(List<View> imageButtons, List<View> progressBars, ProgressBar progressBar) {
+    public DownloadImageTask(List<View> imageButtons, List<View> progressBars, ProgressBar progressBar, TextView loadingText) {
         this.imageButtons = imageButtons;
         this.progressBars = progressBars;
         this.progressBar = progressBar;
+        this.loadingText = loadingText;
     }
 
     @Override
     protected void onPreExecute() {
         progressBar.setVisibility(View.VISIBLE);
+        loadingText.setVisibility(View.VISIBLE);
         imageButtons.forEach(el -> {
             ImageButton imageButton = (ImageButton) el;
             imageButton.setImageResource(android.R.color.transparent);
@@ -46,7 +51,7 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
     @Override
     protected void onProgressUpdate(Object... values) {
         progressBar.setProgress(((int) values[0] + 1) * 5);
-
+        loadingText.setText(MessageFormat.format("Downloading {0} of 20 images...", (int) values[0] + 1));
         ImageButton tmpImgBtn = (ImageButton) imageButtons.get((int) values[0]);
         tmpImgBtn.setAlpha(1f);
         tmpImgBtn.setImageBitmap((Bitmap) values[1]);
@@ -63,6 +68,7 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
             Elements links = doc.select(".photo-grid-item img[src]");
             for (int i = 0; i < 20; i++) {
                 // imageButton loading effect
+                if (isCancelled()) break;
                 InputStream in = new java.net.URL(links.get(i).attr("src")).openStream();
                 publishProgress(i, BitmapFactory.decodeStream(in));
             }
@@ -73,19 +79,12 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
     }
 
     protected void onPostExecute(Void result) {
-        AlphaAnimation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);//fade from 1 to 0 alpha
+        AlphaAnimation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
         fadeOutAnimation.setDuration(2000);
         fadeOutAnimation.setFillEnabled(false);
         progressBar.startAnimation(fadeOutAnimation);
         progressBar.setVisibility(View.INVISIBLE);
-//        if (result.size() != 0) {
-//            for (int i = 0; i < imageButtons.size(); i++) {
-//                imageButtons.get(i).setAlpha(1);
-//                ImageButton tmp = (ImageButton) imageButtons.get(i);
-//                tmp.setImageBitmap(result.get(i));
-//                tmp.setEnabled(true);
-//            }
-//            System.out.println(result.size());
-//        }
+        loadingText.startAnimation(fadeOutAnimation);
+        loadingText.setVisibility(View.INVISIBLE);
     }
 }
