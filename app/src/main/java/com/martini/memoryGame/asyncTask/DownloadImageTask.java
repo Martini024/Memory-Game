@@ -45,9 +45,8 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
 
     @Override
     protected void onProgressUpdate(Object... values) {
-        // update progress bar
-        // update imageButton background
         progressBar.setProgress(((int) values[0] + 1) * 5);
+
         ImageButton tmpImgBtn = (ImageButton) imageButtons.get((int) values[0]);
         tmpImgBtn.setAlpha(1f);
         tmpImgBtn.setImageBitmap((Bitmap) values[1]);
