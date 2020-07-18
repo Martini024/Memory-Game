@@ -27,8 +27,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@null"
+        android:foreground="?attr/selectableItemBackground"
         android:scaleType="centerCrop"
-        android:src="@drawable/code"
+        android:src="@drawable/ic_question_mark"
         android:tag="imageButton" />
 
 </com.wajahatkarim3.easyflipview.EasyFlipView>

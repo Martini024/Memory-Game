@@ -9,11 +9,14 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,12 +44,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ((TextView) findViewById(R.id.score)).setText("0 / 12 matches");
-        Button fetchImage = (Button) findViewById(R.id.fetchImage);
-        fetchImage.setVisibility(View.GONE);
-        fetchImage.setOnClickListener(this);
-        Button playAgain = (Button) findViewById(R.id.playAgain);
-        playAgain.setVisibility(View.GONE);
-        playAgain.setOnClickListener(this);
+        ((Button) findViewById(R.id.fetchImage)).setOnClickListener(this);
+        ((Button) findViewById(R.id.playAgain)).setOnClickListener(this);
+        ((ConstraintLayout) findViewById(R.id.completeStage)).setVisibility(View.GONE);
 
         Bundle extras = getIntent().getExtras();
         File path = null;
@@ -99,16 +99,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 TextView textView = (TextView) findViewById(R.id.score);
                                 textView.setText(MessageFormat.format("{0} / 12 matches", progress));
                                 if (progress == 12) {
-                                    // TODO: congratulations effect
                                     chronometer.stop();
                                     rv.setVisibility(View.INVISIBLE);
-                                    ((Button) findViewById(R.id.fetchImage)).setVisibility(View.VISIBLE);
-                                    ((Button) findViewById(R.id.playAgain)).setVisibility(View.VISIBLE);
+                                    ((ConstraintLayout) findViewById(R.id.completeStage)).setVisibility(View.VISIBLE);
+                                    ((ImageView) findViewById(R.id.dinosaur)).startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.swing));
                                 }
                             } else {
                                 rv.setEnabled(false);
                                 if (currentButton.isFrontSide())
                                     currentButton.flipTheView();
+                                currentButton.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.shake));
+                                lastClickedButton.startAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.shake));
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -159,8 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 recyclerView.setVisibility(View.VISIBLE);
                 ((TextView) findViewById(R.id.score)).setText("0 / 12 matches");
                 ((Chronometer) findViewById(R.id.chronometer)).setBase(SystemClock.elapsedRealtime());
-                ((Button) findViewById(R.id.fetchImage)).setVisibility(View.GONE);
-                ((Button) findViewById(R.id.playAgain)).setVisibility(View.GONE);
+                ((ConstraintLayout) findViewById(R.id.completeStage)).setVisibility(View.GONE);
                 break;
         }
     }

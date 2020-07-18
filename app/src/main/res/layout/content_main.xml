@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/completeStage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="32dp"
@@ -19,13 +20,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:paddingHorizontal="24dp"
             android:text="@string/play_again"
-            android:textSize="18sp"
+            android:textColor="#666666"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/fetchImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintVertical_bias="0.75" />
 
         <Button
             android:id="@+id/fetchImage"
@@ -33,11 +36,38 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/fetch_image"
-            android:textSize="18sp"
+            android:textColor="#666666"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/playAgain"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.75" />
+
+        <ImageView
+            android:id="@+id/dinosaur"
+            android:layout_width="300dp"
+            android:layout_height="320dp"
+            android:contentDescription="@string/dinosaur"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.45"
+            app:srcCompat="@drawable/ic_dinosaur" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/congrats"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/dinosaur"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,6 +91,7 @@
             android:textAlignment="textEnd"
             android:textColor="@android:color/tertiary_text_dark"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -70,7 +101,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="textStart"
+            android:textColor="@android:color/tertiary_text_dark"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
