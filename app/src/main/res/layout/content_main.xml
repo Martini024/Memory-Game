@@ -8,8 +8,6 @@
         android:id="@+id/completeStage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,40 +15,42 @@
 
         <Button
             android:id="@+id/playAgain"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:paddingHorizontal="24dp"
             android:text="@string/play_again"
             android:textColor="#666666"
-            android:textSize="20sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/fetchImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.75" />
+            app:layout_constraintVertical_bias="0.75"
+            app:layout_constraintWidth_percent="0.35" />
 
         <Button
             android:id="@+id/fetchImage"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/fetch_image"
             android:textColor="#666666"
-            android:textSize="20sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/playAgain"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.75" />
+            app:layout_constraintVertical_bias="0.75"
+            app:layout_constraintWidth_percent="0.35" />
 
         <ImageView
             android:id="@+id/dinosaur"
             android:layout_width="300dp"
-            android:layout_height="320dp"
+            android:layout_height="0dp"
             android:contentDescription="@string/dinosaur"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.40"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.45"
@@ -58,12 +58,15 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="16dp"
+            android:maxHeight="100dp"
+            android:minHeight="50dp"
             android:text="@string/congrats"
-            android:textSize="40sp"
+            android:textAlignment="center"
             android:textStyle="bold"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/dinosaur"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -78,7 +81,7 @@
         android:layout_marginEnd="26dp"
         android:contextClickable="false"
         android:textAlignment="textStart"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton"
+        app:layout_constraintBottom_toTopOf="@id/imageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"

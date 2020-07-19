@@ -6,7 +6,7 @@
     <string name="url_input">https://stocksnap.io/search/food</string>
     <string name="loading_text">Enter the url to fetch the images</string>
     <string name="fetch_image">Fetch Images</string>
-    <string name="play_again">Play Again</string>
+    <string name="play_again">\u2005\u2005\u2005Play Again\u2005\u2005\u2005</string>
     <string name="dinosaur">Dinosaur</string>
     <string name="congrats">Congratulations!!!</string>
 </resources>
