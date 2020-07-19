@@ -21,6 +21,14 @@ public class LoadAdapter extends RecyclerView.Adapter<LoadAdapter.ViewHolder> {
     @Override
     public LoadAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_loading_image, parent, false);
+        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        int size = Math.max(parent.getMeasuredHeight(), parent.getMeasuredWidth());
+        marginLayoutParams.width = (int) (size * 0.225);
+        marginLayoutParams.height = (int) (size * 0.225);
+        int margin = (int) Math.round(size * 0.01);
+        parent.setPadding(margin * 3, 0, margin * 3, 0);
+        marginLayoutParams.setMargins(margin, 0, 0, margin);
+        view.setLayoutParams(marginLayoutParams);
         return new LoadAdapter.ViewHolder(view);
     }
 

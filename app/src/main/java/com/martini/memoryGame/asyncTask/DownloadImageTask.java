@@ -71,7 +71,6 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
         } else {
             progressBar.setProgress(((int) values[0] + 1) * (100 / (int) values[2]));
             loadingText.setText(MessageFormat.format("Downloading {0} of {1} images...", (int) values[0] + 1, (int) values[2]));
-            System.out.println((int) values[0]);
             ImageButton tmpImgBtn = (ImageButton) imageButtons.get((int) values[0]);
             tmpImgBtn.setAlpha(1f);
             tmpImgBtn.setImageBitmap((Bitmap) values[1]);
@@ -100,12 +99,16 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
                 }
             }
         } catch (IOException e) {
+            publishProgress(-1);
             System.out.println(e.getMessage());
         }
         return null;
     }
 
-    protected void postExecute() {
+    @SuppressLint("SetTextI18n")
+    protected void onPostExecute(Void v) {
         progressBar.setProgress(100);
+        loadingText.setText("Download completed!!!");
+
     }
 }

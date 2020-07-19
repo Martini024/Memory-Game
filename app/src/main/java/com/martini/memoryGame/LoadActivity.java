@@ -98,7 +98,7 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBarHorizontal);
             progressBar.setProgress(0);
             TextView loadingText = (TextView) findViewById(R.id.loadingText);
-            loadingText.setText(R.string.loading_text);
+            loadingText.setText("Downloading...");
             findViewById(R.id.confirm).setEnabled(false);
             selectedImage.forEach(el -> {
                 el.setForeground(null);
@@ -112,12 +112,19 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
 
             List<View> imageButtonList = ViewGroupUtils.getViewsByTag(findViewById(R.id.imageButton).getRootView(), "imageButton");
             List<View> progressBarList = ViewGroupUtils.getViewsByTag(findViewById(R.id.progressBar).getRootView(), "progressBar");
+            imageButtonList.forEach(el -> ((ImageButton) el).setImageResource(R.drawable.ic_question_mark));
+            progressBarList.forEach(el -> ((ProgressBar) el).setVisibility(View.GONE));
             if (URLUtil.isValidUrl(editText.getText().toString())) {
                 if (downloadImageTask != null) {
                     downloadImageTask.cancel(true);
                 }
                 downloadImageTask = new DownloadImageTask(getBaseContext(), imageButtonList, progressBarList, progressBar, loadingText);
                 downloadImageTask.execute(editText.getText().toString());
+            } else {
+                Toast toast = Toast.makeText(getBaseContext(), "Invalid url",
+                        Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
             }
         } else if (v.getId() == R.id.confirm) {
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
