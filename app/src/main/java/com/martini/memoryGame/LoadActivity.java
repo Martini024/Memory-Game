@@ -60,7 +60,7 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
                         imageButton.setImageAlpha(255);
                         findViewById(R.id.confirm).setEnabled(false);
                     } else if (selectedImage.size() == 6) {
-                        Toast toast = Toast.makeText(getBaseContext(), "Cannot select image more than 6",
+                        Toast toast = Toast.makeText(getBaseContext(), "Cannot select more than 6 images",
                                 Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
