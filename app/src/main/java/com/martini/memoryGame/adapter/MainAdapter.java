@@ -29,7 +29,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         marginLayoutParams.width = (int) (size * 0.28);
         marginLayoutParams.height = (int) (size * 0.28);
         int margin = (int) (size * 0.01);
-        parent.setPadding(margin * 3, margin, margin * 5, 0);
+        parent.setPadding(margin * 3, 0, margin * 5, 0);
         marginLayoutParams.setMargins(margin * 2, 0, 0, margin * 2);
         view.setLayoutParams(marginLayoutParams);
         return new ViewHolder(view);

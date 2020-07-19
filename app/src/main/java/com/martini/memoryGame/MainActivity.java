@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.martini.memoryGame.adapter.MainAdapter;
+import com.martini.memoryGame.util.ViewGroupUtils;
 import com.wajahatkarim3.easyflipview.EasyFlipView;
 
 import java.io.File;
@@ -35,6 +36,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private List<Bitmap> bitmaps = new ArrayList<>();
+    private List<View> imageViews = new ArrayList<>();
     private int lastClicked = -1;
     private int progress = -1;
 
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((Button) findViewById(R.id.fetchImage)).setOnClickListener(this);
         ((Button) findViewById(R.id.playAgain)).setOnClickListener(this);
         ((ConstraintLayout) findViewById(R.id.completeStage)).setVisibility(View.GONE);
+        imageViews = ViewGroupUtils.getViewsByTag(findViewById(R.id.imageView).getRootView(), "imageView");
 
         Bundle extras = getIntent().getExtras();
         File path = null;
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         } else if (lastClicked != position) {
                             EasyFlipView lastClickedButton = (EasyFlipView) rv.getChildAt(lastClicked);
                             if (bitmaps.get(lastClicked).sameAs(bitmaps.get(position))) {
-                                // TODO: add score effect
+                                imageViews.get(progress / 2).setVisibility(View.VISIBLE);
                                 if (currentButton.isFrontSide())
                                     currentButton.flipTheView();
                                 currentButton.setEnabled(false);
@@ -158,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
                 recyclerView.setAdapter(new MainAdapter(bitmaps));
                 recyclerView.setVisibility(View.VISIBLE);
+                imageViews.forEach(el -> el.setVisibility(View.INVISIBLE));
                 ((TextView) findViewById(R.id.score)).setText("0 / 12 matches");
                 ((Chronometer) findViewById(R.id.chronometer)).setBase(SystemClock.elapsedRealtime());
                 ((ConstraintLayout) findViewById(R.id.completeStage)).setVisibility(View.GONE);
