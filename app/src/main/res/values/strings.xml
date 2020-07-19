@@ -4,7 +4,7 @@
     <string name="btn_fetch">Fetch</string>
     <string name="btn_confirm">Confirm</string>
     <string name="url_input">https://stocksnap.io/search/food</string>
-    <string name="loading_text">Downloading 0 of 20 images…</string>
+    <string name="loading_text">Enter the url to fetch the images</string>
     <string name="fetch_image">Fetch Images</string>
     <string name="play_again">Play Again</string>
     <string name="dinosaur">Dinosaur</string>

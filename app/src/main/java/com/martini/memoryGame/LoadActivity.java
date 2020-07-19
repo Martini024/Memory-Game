@@ -116,7 +116,7 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
                 if (downloadImageTask != null) {
                     downloadImageTask.cancel(true);
                 }
-                downloadImageTask = new DownloadImageTask(imageButtonList, progressBarList, progressBar, loadingText);
+                downloadImageTask = new DownloadImageTask(getBaseContext(), imageButtonList, progressBarList, progressBar, loadingText);
                 downloadImageTask.execute(editText.getText().toString());
             }
         } else if (v.getId() == R.id.confirm) {

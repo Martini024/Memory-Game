@@ -1,12 +1,18 @@
 package com.martini.memoryGame.asyncTask;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.martini.memoryGame.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,8 +31,10 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
     List<View> progressBars = new LinkedList<>();
     ProgressBar progressBar;
     TextView loadingText;
+    Context context;
 
-    public DownloadImageTask(List<View> imageButtons, List<View> progressBars, ProgressBar progressBar, TextView loadingText) {
+    public DownloadImageTask(Context context, List<View> imageButtons, List<View> progressBars, ProgressBar progressBar, TextView loadingText) {
+        this.context = context;
         this.imageButtons = imageButtons;
         this.progressBars = progressBars;
         this.progressBar = progressBar;
@@ -35,27 +43,44 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
 
     @Override
     protected void onPreExecute() {
-        imageButtons.forEach(el -> {
-            ImageButton imageButton = (ImageButton) el;
-            imageButton.setImageResource(android.R.color.transparent);
-        });
-        progressBars.forEach(el -> {
-            ProgressBar progressBar = (ProgressBar) el;
-            progressBar.setVisibility(View.VISIBLE);
-        });
+        imageButtons.forEach(el -> ((ImageButton) el).setImageResource(android.R.color.transparent));
+        progressBars.forEach(el -> ((ProgressBar) el).setVisibility(View.VISIBLE));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onProgressUpdate(Object... values) {
-        progressBar.setProgress(((int) values[0] + 1) * 5);
-        loadingText.setText(MessageFormat.format("Downloading {0} of 20 images...", (int) values[0] + 1));
-        ImageButton tmpImgBtn = (ImageButton) imageButtons.get((int) values[0]);
-        tmpImgBtn.setAlpha(1f);
-        tmpImgBtn.setImageBitmap((Bitmap) values[1]);
-        tmpImgBtn.setEnabled(true);
+        if ((int) values[0] == 0) {
+            for (int i = (int) values[2]; i < 20; i++) {
+                ((ImageButton) imageButtons.get(i)).setImageResource(R.drawable.ic_question_mark);
+                ((ImageButton) imageButtons.get(i)).setEnabled(false);
+                ((ProgressBar) progressBars.get(i)).setVisibility(View.GONE);
+            }
+        }
+        if ((int) values[0] == -1) {
+            imageButtons.forEach(el -> {
+                ((ImageButton) el).setImageResource(R.drawable.ic_question_mark);
+                ((ImageButton) el).setEnabled(false);
+            });
+            progressBars.forEach(el -> ((ProgressBar) el).setVisibility(View.GONE));
+            Toast toast = Toast.makeText(context, "Not enough images from the url",
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            loadingText.setText("Enter the url to fetch the images");
+        } else {
+            progressBar.setProgress(((int) values[0] + 1) * (100 / (int) values[2]));
+            loadingText.setText(MessageFormat.format("Downloading {0} of {1} images...", (int) values[0] + 1, (int) values[2]));
+            System.out.println((int) values[0]);
+            ImageButton tmpImgBtn = (ImageButton) imageButtons.get((int) values[0]);
+            tmpImgBtn.setAlpha(1f);
+            tmpImgBtn.setImageBitmap((Bitmap) values[1]);
+            tmpImgBtn.setEnabled(true);
 
-        ProgressBar tmpProgressBar = (ProgressBar) progressBars.get((int) values[0]);
-        tmpProgressBar.setVisibility(View.GONE);
+            ProgressBar tmpProgressBar = (ProgressBar) progressBars.get((int) values[0]);
+            tmpProgressBar.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -63,15 +88,24 @@ public class DownloadImageTask extends AsyncTask<String, Object, Void> {
         try {
             Document doc = Jsoup.connect(pageUrls[0]).get();
             Elements links = doc.select(".photo-grid-item img[src]");
-            for (int i = 0; i < 20; i++) {
-                // imageButton loading effect
-                if (isCancelled()) break;
-                InputStream in = new java.net.URL(links.get(i).attr("src")).openStream();
-                publishProgress(i, BitmapFactory.decodeStream(in));
+            if (links.size() < 6) {
+                publishProgress(-1);
+            } else {
+                int size = (Math.min(links.size(), 20));
+                for (int i = 0; i < size; i++) {
+                    // imageButton loading effect
+                    if (isCancelled()) break;
+                    InputStream in = new java.net.URL(links.get(i).attr("src")).openStream();
+                    publishProgress(i, BitmapFactory.decodeStream(in), size);
+                }
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    protected void postExecute() {
+        progressBar.setProgress(100);
     }
 }
