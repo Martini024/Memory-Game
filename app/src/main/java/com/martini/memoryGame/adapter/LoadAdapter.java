@@ -26,7 +26,7 @@ public class LoadAdapter extends RecyclerView.Adapter<LoadAdapter.ViewHolder> {
         marginLayoutParams.width = (int) (size * 0.225);
         marginLayoutParams.height = (int) (size * 0.225);
         int margin = (int) Math.round(size * 0.01);
-        parent.setPadding(margin * 3, 0, margin * 3, 0);
+        parent.setPadding(margin * 3, margin * 3, margin * 4, 0);
         marginLayoutParams.setMargins(margin, 0, 0, margin);
         view.setLayoutParams(marginLayoutParams);
         return new LoadAdapter.ViewHolder(view);
